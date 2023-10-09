@@ -43,4 +43,17 @@ export class ContactService {
     });
     return { data, count };
   }
+  async getOneContact(id: string) {
+    const data = await this.contactRepo.findOne({
+      where: { id },
+      relations: { image: true },
+    });
+    return { data };
+  }
+  async deleteContact(id: string) {
+    const data = await this.contactRepo.softDelete({
+      id,
+    });
+    return { data };
+  }
 }

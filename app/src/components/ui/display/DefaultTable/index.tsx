@@ -1,15 +1,15 @@
-import { Box, Overlay, ScrollArea, useMantineTheme } from '@mantine/core';
-import { DataTable, DataTableColumn, DataTableProps } from 'mantine-datatable';
-import React from 'react';
+import { Box, Overlay, ScrollArea, useMantineTheme } from "@mantine/core";
+import { DataTable, DataTableColumn, DataTableProps } from "mantine-datatable";
+import React from "react";
 
 import {
   EmptyTableState,
   IEmptyTableStateProps,
-} from '../../empty-state/EmptyTableState';
+} from "../../empty-state/EmptyTableState";
 
-import { Pagination, PaginationProps } from '../Pagination';
+import { Pagination, PaginationProps } from "../Pagination";
 
-import { useStyles } from './styles';
+import { useStyles } from "./styles";
 
 export type IDefaultTableProps<T> = DataTableProps<T> & {
   minWidth?: number | string;
@@ -23,12 +23,12 @@ export function DefaultTable<T>(props: IDefaultTableProps<T>) {
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const {
-    minHeight, 
-    noRecordsText, 
-    defaultColumnRender, 
-    highlightOnHover, 
-    noRecordsIcon, 
-    groups, 
+    minHeight,
+    noRecordsText,
+    defaultColumnRender,
+    highlightOnHover,
+    noRecordsIcon,
+    groups,
     paginationProps,
     emptyTableStateProps,
     columns,
@@ -54,7 +54,7 @@ export function DefaultTable<T>(props: IDefaultTableProps<T>) {
   return (
     <Box>
       <ScrollArea w="100%" h="100%" mb="xs" pos="relative">
-        <Box sx={{ minWidth: minWidth ?? 600, width: '100%' }}>
+        <Box sx={{ minWidth: minWidth ?? 600, width: "100%" }}>
           <DataTable
             classNames={classes}
             fontSize={12}
@@ -66,20 +66,16 @@ export function DefaultTable<T>(props: IDefaultTableProps<T>) {
             borderColor={theme.colors.brand[5]}
             highlightOnHover={true}
             rowBorderColor={theme.colors.brand[1]}
-            minHeight={0}
+            minHeight={300}
             defaultColumnRender={(row, _, accessor) => {
               const data = row[accessor];
-              return data === 0 ? 0 : data ?? '-';
+              return data === 0 ? 0 : data ?? "-";
             }}
-            emptyState={<></>}
+            // emptyState={}
             {...rest}
           />
         </Box>
       </ScrollArea>
-
-      {props.records && props.records.length === 0 && (
-        <EmptyTableState {...emptyTableStateProps} />
-      )}
 
       {paginationProps && <Pagination {...paginationProps} />}
     </Box>

@@ -1,68 +1,57 @@
-import { useRefetchContacts } from "@/utils";
-import { Box, Button, Group, Stack, TextInput } from "@mantine/core";
-import { UseFormReturnType, useForm } from "@mantine/form";
-import React, { useEffect } from "react";
+import { Box, Container, Group, Paper, Title } from "@mantine/core";
 
-export type ContactFormValues = {
-  name: string;
-  email: string;
-};
+import { useForm } from "@/components/ui";
 
-type Props = {
-  onSubmit?: () => void;
-  methods: UseFormReturnType<
-    ContactFormValues,
-    (values: ContactFormValues) => ContactFormValues
-  >;
-  initialValues?: ContactFormValues;
-  submitLabel?: string;
-};
+import { contactFormControllers } from "@/utils/form-controllers/contact";
+import { contactFormSchema } from "@/utils/form-validation/contact";
+import { ContactFormValues } from "@/types/form-values/contact";
 
-export function ContactForm(props: Props) {
-  // const submitHandle = async () => {
-  //   console.log("Submit Handle");
-  //   props.onSubmit?.(form.values);
-  // };
+const sleep = (ms: number) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 
-  // const form = useForm<ContactFormValues>({
-  //   initialValues: props.initialValues,
-  //   validate: {
-  //     email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-  //   },
-  // });
+export function ContactForm() {
+  const [Form, methods] = useForm<ContactFormValues>({
+    defaultValues: {
+      name: "",
+      email: "",
+      gender: "",
+      phoneNumber: null,
+      photo: null,
+    },
+    schema: contactFormSchema,
+    controllers: contactFormControllers,
+    onSubmit: async (values, ctx) => {
+      console.log(values); // eslint-disable-line no-console
+      await sleep(1000);
+      ctx.setError(
+        "phoneNumber",
+        { message: "Invalid phone number" },
+        { shouldFocus: false }
+      );
+    },
+  });
+
+  const {
+    formState: { isSubmitting },
+  } = methods;
+
+  return Form;
 
   return (
-    <form onSubmit={props.onSubmit}>
-      <Stack spacing={12}>
-        <TextInput
-          withAsterisk
-          label="Email"
-          placeholder="Enter the contact email"
-          radius="md"
-          size="sm"
-          {...props.methods.getInputProps("email")}
-        />
-        <TextInput
-          withAsterisk
-          label="Nama"
-          placeholder="Enter the contact name"
-          radius="md"
-          size="sm"
-          {...props.methods.getInputProps("name")}
-        />
-
-        <Group spacing="flex-end" mt={8}>
-          <Button
-            type="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              props.onSubmit?.();
-            }}
-          >
-            {props.submitLabel ?? "Submit"}
-          </Button>
-        </Group>
-      </Stack>
-    </form>
+    <Container size={1200} my={40}>
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+        <Title order={2} mb={20} align="center">
+          Contact Form
+        </Title>
+        <Form grid={{ gutter: "xs" }} />
+        <Box mt={25}>
+          <Form.Button fullWidth mt="xl" loading={isSubmitting} type="submit">
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </Form.Button>
+        </Box>
+      </Paper>
+    </Container>
   );
 }
