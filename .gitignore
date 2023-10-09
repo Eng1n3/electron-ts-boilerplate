@@ -6,4 +6,5 @@
 /prisma/*.sqlite
 /prisma/**/*.sqlite-journal
 /prisma/migrations
-database/**/*.sqlite
+/**/*.sqlite
+/dist

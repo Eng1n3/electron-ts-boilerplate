@@ -1,6 +1,6 @@
 {
   "name": "contact-app-electron",
-  "version": "1.0.4",
+  "version": "1.0.0",
   "description": "Contact Management App",
   "main": "./dist/main.js",
   "scripts": {

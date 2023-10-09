@@ -5,7 +5,7 @@ const typeorm_1 = require("typeorm");
 const path_1 = require("path");
 exports.dataSourceOptions = {
     type: "sqlite",
-    database: (0, path_1.join)(__dirname, "..", "..", "databases", "contact.sqlite"),
+    database: (0, path_1.join)(__dirname, "..", "..", "contact.sqlite"),
     entities: [(0, path_1.join)(__dirname, "..", "**", "*.entity.{ts,js}")],
     synchronize: true,
     migrations: [

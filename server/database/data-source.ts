@@ -3,7 +3,7 @@ import { join } from "path";
 
 export const dataSourceOptions: DataSourceOptions = {
   type: "sqlite",
-  database: join(__dirname, "..", "..", "databases", "contact.sqlite"),
+  database: join(__dirname, "..", "..", "contact.sqlite"),
   entities: [join(__dirname, "..", "**", "*.entity.{ts,js}")],
   synchronize: true,
   migrations: [
