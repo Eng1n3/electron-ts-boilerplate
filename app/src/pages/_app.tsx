@@ -5,6 +5,13 @@ import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import NextNProgress from "nextjs-progressbar";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 
 // import { GoogleAnalytics } from 'nextjs-google-analytics';
 import "../styles/global.css";
@@ -33,6 +40,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     process.env.NEXT_PUBLIC_DAPOBUD_LANDING_PAGE_URL ??
     "https://dapobud.kemdikbud.vercel.optimap.id"
   }/meta-image.png`;
+
+  // Create a client
+  const queryClient = new QueryClient({});
 
   return getLayout(
     <>
@@ -72,18 +82,20 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
-        <Notifications position="top-right" notificationMaxHeight={400} />
-        <NextNProgress
-          color={theme?.colors?.brand?.[5] ?? "#38d9a9"}
-          height={4}
-          options={{
-            showSpinner: false,
-          }}
-        />
-        <Component {...pageProps} />
-        {/* <GoogleAnalytics trackPageViews /> */}
-      </MantineProvider>
+      <QueryClientProvider client={queryClient}>
+        <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
+          <Notifications position="top-right" notificationMaxHeight={400} />
+          <NextNProgress
+            color={theme?.colors?.brand?.[5] ?? "#38d9a9"}
+            height={4}
+            options={{
+              showSpinner: false,
+            }}
+          />
+          <Component {...pageProps} />
+          {/* <GoogleAnalytics trackPageViews /> */}
+        </MantineProvider>
+      </QueryClientProvider>
     </>
   );
 }
