@@ -52,6 +52,15 @@ export class ContactIpc {
         }
       });
 
+      this.ipcMain.handle("get-one-contact", async (event, value) => {
+        const { data } = await this.contactService.getOneContact(value.id);
+        return {
+          statusCode: 200,
+          message: "Success get contacts",
+          data,
+        };
+      });
+
       this.ipcMain.handle("create-contact", async (event, values) => {
         try {
           await this.contactService.createContact(values);
@@ -66,5 +75,14 @@ export class ContactIpc {
     } catch (error) {
       throw error;
     }
+
+    this.ipcMain.handle("delete-contact", async (event, values) => {
+      const { data } = await this.contactService.deleteContact(values.id);
+      return {
+        statusCode: 200,
+        message: "Success delete contacts",
+        data,
+      };
+    });
   }
 }

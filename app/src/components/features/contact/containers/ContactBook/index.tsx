@@ -4,13 +4,15 @@ import { ActionIcon, Group, Modal, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import React from "react";
+import { DeleteConfirmModal } from "../DeleteConfirmModal";
 
 type Props = {};
 
 export function ContactBook({}: Props) {
-  const [opened, { close, open }] = useDisclosure();
+  const [editModalOpened, { toggle: editModalToggle }] = useDisclosure();
+  const [deleteModalOpened, { toggle: deleteModalToggle }] = useDisclosure();
   const [contactId, setContactId] = React.useState();
-  const foo = useRefetchContacts((state) => state);
+  const { isRefetch, killRefetch } = useRefetchContacts((state) => state);
   const [contacts, setContacts] = React.useState<any[]>([]);
 
   const fetchData = async () => {
@@ -24,15 +26,15 @@ export function ContactBook({}: Props) {
   React.useEffect(() => {
     fetchData()
       .then((res) => {
-        console.log(res);
-        setContacts(res?.data);
+        console.log("CONTACTS", res);
+        setContacts(res.data.data);
       })
       // make sure to catch any error
       .catch(console.error);
   }, []);
 
   React.useEffect(() => {
-    if (foo?.isRefetch) {
+    if (isRefetch) {
       fetchData()
         .then((res) => {
           setContacts(res?.data);
@@ -41,8 +43,8 @@ export function ContactBook({}: Props) {
         .catch(console.error);
     }
 
-    foo?.killRefetch();
-  }, [foo?.isRefetch]);
+    killRefetch();
+  }, [isRefetch, killRefetch]);
 
   return (
     <>
@@ -52,6 +54,9 @@ export function ContactBook({}: Props) {
         columns={[
           { accessor: "name", title: "Name" },
           { accessor: "email", title: "Email" },
+          { accessor: "phoneNumber", title: "Phone Number" },
+          { accessor: "photo", title: "Photo" },
+          { accessor: "gender", title: "Gender" },
           {
             accessor: "action",
             title: "Action",
@@ -61,7 +66,7 @@ export function ContactBook({}: Props) {
                   title="Edit"
                   onClick={() => {
                     setContactId(row.id);
-                    open();
+                    editModalToggle();
                   }}
                   size={16}
                 >
@@ -70,7 +75,8 @@ export function ContactBook({}: Props) {
                 <ActionIcon
                   title="Delete"
                   onClick={() => {
-                    deleteContact(row.id);
+                    setContactId(row.id);
+                    deleteModalToggle();
                   }}
                 >
                   <IconTrash size={16} />
@@ -81,12 +87,26 @@ export function ContactBook({}: Props) {
         ]}
         records={contacts ?? []}
       />
-      <Modal opened={opened} onClose={close} radius="lg">
-        <Title order={2} className="heading3" mb="sm">
-          Edit Contact
-        </Title>
+      <Modal
+        opened={editModalOpened}
+        onClose={editModalToggle}
+        radius="lg"
+        padding="lg"
+        size="md"
+        withCloseButton
+        title="Edit Contact"
+        classNames={{
+          title: "heading3",
+        }}
+      >
         <ContactEditForm contactId={contactId ?? ""} />
       </Modal>
+
+      <DeleteConfirmModal
+        contactId={contactId ?? ""}
+        onClose={deleteModalToggle}
+        opened={deleteModalOpened}
+      />
     </>
   );
 }
