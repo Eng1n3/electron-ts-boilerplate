@@ -4,13 +4,16 @@ import { Contact } from "./entities/contact.entity";
 import { ContactDto } from "./dto/contact.dto";
 import { ContactImage } from "../contact-image/entities/contact-image.entity";
 import axios from "axios";
+import { Synchronize } from "../synchronize/entities/synchronize.entity";
 
 export class ContactService {
   public static _instance: ContactService;
   private readonly contactRepo: Repository<Contact>;
   private readonly contactImageRepo: Repository<ContactImage>;
+  private readonly synchronizeRepo: Repository<Synchronize>;
 
   constructor() {
+    this.synchronizeRepo = AppDataSource.getRepository(Synchronize);
     this.contactRepo = AppDataSource.getRepository(Contact);
     this.contactImageRepo = AppDataSource.getRepository(ContactImage);
   }
@@ -23,10 +26,12 @@ export class ContactService {
   }
 
   async synchronizeContact({ id }: { id?: string }) {
+    const lastDate = await this.synchronizeRepo.findOne({
+      order: { lastDateDatabase: "desc" },
+    });
     const contacts = await this.contactRepo.find({
       where: {
         statusUpload: "store",
-        deletedAt: IsNull(),
         id: id ? id : undefined,
       },
       relations: { image: true },
