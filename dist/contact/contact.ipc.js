@@ -16,21 +16,52 @@ class ContactIpc {
     }
     async getIpc() {
         try {
+            this.ipcMain.handle("synchronize-contact", async () => {
+                try {
+                    await this.contactService.synchronizeContact({});
+                    return {
+                        statusCode: 200,
+                        message: "Success synchronize contacts",
+                    };
+                }
+                catch (error) {
+                    console.log(error);
+                    return {
+                        statusCode: 500,
+                        message: "internal server error",
+                    };
+                }
+            });
             this.ipcMain.handle("get-contact", async () => {
-                const { data, count } = await this.contactService.getContact();
-                return {
-                    statusCode: 200,
-                    message: "Success get contacts",
-                    data: { data, count },
-                };
+                try {
+                    const { data, count } = await this.contactService.getContact();
+                    return {
+                        statusCode: 200,
+                        message: "Success get contacts",
+                        data: { data, count },
+                    };
+                }
+                catch (error) {
+                    return {
+                        statusCode: 500,
+                        message: "internal server error",
+                    };
+                }
             });
             this.ipcMain.handle("create-contact", async (event, values) => {
-                await this.contactService.createContact(values);
-                return { statusCode: 200, message: "Success create contact" };
+                try {
+                    await this.contactService.createContact(values);
+                    return { statusCode: 200, message: "Success create contact" };
+                }
+                catch (error) {
+                    return {
+                        statusCode: 500,
+                        message: "internal server error",
+                    };
+                }
             });
         }
         catch (error) {
-            console.log(37, error);
             throw error;
         }
     }

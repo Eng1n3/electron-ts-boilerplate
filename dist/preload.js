@@ -9,6 +9,7 @@ electron_1.contextBridge.exposeInMainWorld("versions", {
     // we can also expose variables, not just functions
 });
 electron_1.contextBridge.exposeInMainWorld("contact", {
+    synchronizeContact: () => electron_1.ipcRenderer.invoke("synchronize-contact"),
     deleteContact: (value) => electron_1.ipcRenderer.invoke("delete-contact", value),
     updateContact: (value) => electron_1.ipcRenderer.invoke("update-contact", value),
     getContact: () => electron_1.ipcRenderer.invoke("get-contact"),

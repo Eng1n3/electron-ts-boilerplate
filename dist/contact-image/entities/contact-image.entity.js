@@ -13,9 +13,6 @@ exports.ContactImage = void 0;
 const typeorm_1 = require("typeorm");
 const contact_entity_1 = require("../../contact/entities/contact.entity");
 let ContactImage = class ContactImage {
-    save() {
-        throw new Error("Method not implemented.");
-    }
 };
 __decorate([
     (0, typeorm_1.OneToOne)(() => contact_entity_1.Contact, (contact) => contact.image),

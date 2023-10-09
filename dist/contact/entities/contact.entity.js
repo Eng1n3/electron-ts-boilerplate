@@ -52,6 +52,10 @@ __decorate([
     (0, typeorm_1.DeleteDateColumn)(),
     __metadata("design:type", Date)
 ], Contact.prototype, "deletedAt", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Contact.prototype, "statusUpload", void 0);
 Contact = __decorate([
     (0, typeorm_1.Entity)({ name: "contacts" })
 ], Contact);
