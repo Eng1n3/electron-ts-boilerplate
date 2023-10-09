@@ -4,11 +4,13 @@ import { ActionIcon, Group, Modal, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import React from "react";
+import { DeleteConfirmModal } from "../DeleteConfirmModal";
 
 type Props = {};
 
 export function ContactBook({}: Props) {
-  const [opened, { toggle }] = useDisclosure();
+  const [editModalOpened, { toggle: editModalToggle }] = useDisclosure();
+  const [deleteModalOpened, { toggle: deleteModalToggle }] = useDisclosure();
   const [contactId, setContactId] = React.useState();
   const { isRefetch, killRefetch } = useRefetchContacts((state) => state);
   const [contacts, setContacts] = React.useState<any[]>([]);
@@ -64,7 +66,7 @@ export function ContactBook({}: Props) {
                   title="Edit"
                   onClick={() => {
                     setContactId(row.id);
-                    toggle();
+                    editModalToggle();
                   }}
                   size={16}
                 >
@@ -73,7 +75,8 @@ export function ContactBook({}: Props) {
                 <ActionIcon
                   title="Delete"
                   onClick={() => {
-                    deleteContact(row.id);
+                    setContactId(row.id);
+                    deleteModalToggle();
                   }}
                 >
                   <IconTrash size={16} />
@@ -85,8 +88,8 @@ export function ContactBook({}: Props) {
         records={contacts ?? []}
       />
       <Modal
-        opened={opened}
-        onClose={toggle}
+        opened={editModalOpened}
+        onClose={editModalToggle}
         radius="lg"
         padding="lg"
         size="md"
@@ -98,6 +101,12 @@ export function ContactBook({}: Props) {
       >
         <ContactEditForm contactId={contactId ?? ""} />
       </Modal>
+
+      <DeleteConfirmModal
+        contactId={contactId ?? ""}
+        onClose={deleteModalToggle}
+        opened={deleteModalOpened}
+      />
     </>
   );
 }

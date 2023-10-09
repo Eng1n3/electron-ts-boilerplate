@@ -46,5 +46,14 @@ export class ContactIpc {
       console.log(37, error);
       throw error;
     }
+
+    this.ipcMain.handle("delete-contact", async (event, values) => {
+      const { data } = await this.contactService.deleteContact(values.id);
+      return {
+        statusCode: 200,
+        message: "Success delete contacts",
+        data,
+      };
+    });
   }
 }

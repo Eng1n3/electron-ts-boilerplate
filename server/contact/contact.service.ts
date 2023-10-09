@@ -50,4 +50,10 @@ export class ContactService {
     });
     return { data };
   }
+  async deleteContact(id: string) {
+    const data = await this.contactRepo.softDelete({
+      id,
+    });
+    return { data };
+  }
 }
