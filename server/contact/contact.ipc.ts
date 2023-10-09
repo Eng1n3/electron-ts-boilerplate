@@ -29,6 +29,15 @@ export class ContactIpc {
         };
       });
 
+      this.ipcMain.handle("get-one-contact", async (event, value) => {
+        const { data } = await this.contactService.getOneContact(value.id);
+        return {
+          statusCode: 200,
+          message: "Success get contacts",
+          data,
+        };
+      });
+
       this.ipcMain.handle("create-contact", async (event, values) => {
         await this.contactService.createContact(values);
         return { statusCode: 200, message: "Success create contact" };
