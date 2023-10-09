@@ -14,33 +14,35 @@ type Props = Omit<Omit<ModalProps, "children">, "title"> & {
   confirmationTitle: string;
   confirmationDesc?: string;
 };
-export function ConfirmationModal(props: Props) {
+export function ConfirmationModal({
+  onConfirm,
+  themeColor,
+  confirmationTitle,
+  confirmationDesc,
+  ...modalProps
+}: Props) {
   return (
     <Modal
-      {...props}
+      {...modalProps}
       size="md"
       radius="lg"
       padding="lg"
       withCloseButton
-      title={props.confirmationTitle}
+      title={confirmationTitle}
       classNames={{
         title: "heading4",
       }}
     >
-      {props.confirmationDesc && (
-        <Alert color={props.themeColor} left={1}>
-          {props.confirmationDesc}
+      {confirmationDesc && (
+        <Alert color={themeColor} left={1}>
+          {confirmationDesc}
         </Alert>
       )}
       <Group position="center" mt="md">
-        <Button variant="subtle" color="gray" onClick={props.onClose}>
+        <Button variant="subtle" color="gray" onClick={modalProps.onClose}>
           Batalkan
         </Button>
-        <Button
-          color={props.themeColor}
-          variant="filled"
-          onClick={props.onConfirm}
-        >
+        <Button color={themeColor} variant="filled" onClick={onConfirm}>
           Hapus
         </Button>
       </Group>
