@@ -10,6 +10,11 @@ import { IconPlus, IconRecycle, IconSend } from "@tabler/icons-react";
 
 export default function HomePage() {
   const [opened, { toggle }] = useDisclosure();
+  const sync = async () => {
+    console.log("syc");
+    await (global as any).contact.synchronizeContact();
+  };
+
   return (
     <DefaultLayout>
       <Group position="right" spacing="xs">
@@ -18,6 +23,7 @@ export default function HomePage() {
           size="xs"
           radius="md"
           color="indigo"
+          onClick={sync}
         >
           Synchronize
         </Button>

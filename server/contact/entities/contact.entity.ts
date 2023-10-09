@@ -44,4 +44,7 @@ export class Contact {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @Column()
+  statusUpload: string;
 }

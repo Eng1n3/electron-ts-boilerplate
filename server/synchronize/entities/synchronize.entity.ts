@@ -8,27 +8,20 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Contact } from "../../contact/entities/contact.entity";
 
-@Entity({ name: "contacts_images" })
+@Entity({ name: "synchronize" })
 export class ContactImage {
-  @OneToOne(() => Contact, (contact: Contact) => contact.image)
-  contact: Contact;
-
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column()
-  filename: string;
+  lastDateSynchronize: Date;
 
   @Column()
-  originalName: string;
-
-  @Column()
-  mimeType: string;
+  lastDateDatabase: Date;
 
   @CreateDateColumn()
-  createdAt?: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt?: Date;
