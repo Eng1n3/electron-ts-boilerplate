@@ -8,7 +8,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Contact } from "../../contact/entities/contact.entity";
 
 @Entity({ name: "synchronize" })
 export class ContactImage {

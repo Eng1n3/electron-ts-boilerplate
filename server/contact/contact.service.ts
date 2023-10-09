@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { Repository, IsNull } from "typeorm";
 import { AppDataSource } from "../database/data-source";
 import { Contact } from "./entities/contact.entity";
 import { ContactDto } from "./dto/contact.dto";
@@ -24,7 +24,11 @@ export class ContactService {
 
   async synchronizeContact({ id }: { id?: string }) {
     const contacts = await this.contactRepo.find({
-      where: { statusUpload: "store", id: id ? id : undefined },
+      where: {
+        statusUpload: "store",
+        deletedAt: IsNull(),
+        id: id ? id : undefined,
+      },
       relations: { image: true },
     });
     const { status: uploadsStatus, data: updloadData } = await axios.post(
@@ -72,6 +76,7 @@ export class ContactService {
     });
     return { data, count };
   }
+
   async getOneContact(id: string) {
     const data = await this.contactRepo.findOne({
       where: { id },
@@ -79,6 +84,7 @@ export class ContactService {
     });
     return { data };
   }
+
   async deleteContact(id: string) {
     const data = await this.contactRepo.softDelete({
       id,

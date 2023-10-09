@@ -28,7 +28,6 @@ export class ContactIpc {
             message: "Success synchronize contacts",
           };
         } catch (error) {
-          console.log(error);
           return {
             statusCode: 500,
             message: "internal server error",
