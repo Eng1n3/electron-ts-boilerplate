@@ -9,8 +9,8 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
-@Entity({ name: "synchronize" })
-export class ContactImage {
+@Entity({ name: "synchronizes" })
+export class Synchronize {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
