@@ -1,0 +1,39 @@
+{
+  "name": "app",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": ".",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/server": "^11.11.0",
+    "@mantine/core": "^6.0.21",
+    "@mantine/dates": "^6.0.21",
+    "@mantine/form": "^6.0.21",
+    "@mantine/hooks": "^6.0.21",
+    "@mantine/modals": "^6.0.21",
+    "@mantine/next": "^6.0.21",
+    "@mantine/notifications": "^6.0.21",
+    "@tabler/icons-react": "^2.38.0",
+    "dayjs": "^1.11.10",
+    "mantine-datatable": "^2.9.14",
+    "next": "latest",
+    "nextjs-progressbar": "^0.0.16",
+    "react": "latest",
+    "react-dom": "latest",
+    "zustand": "^4.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "typescript": "latest"
+  }
+}

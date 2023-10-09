@@ -1,0 +1,9 @@
+/**/*node_modules
+/app/.next
+/app/out
+/app/next-env.d.ts
+/out/
+/prisma/*.sqlite
+/prisma/**/*.sqlite-journal
+/prisma/migrations
+database/**/*.sqlite

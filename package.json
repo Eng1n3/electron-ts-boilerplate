@@ -1,0 +1,79 @@
+{
+  "name": "contact-app-electron",
+  "version": "1.0.4",
+  "description": "Contact Management App",
+  "main": "./dist/main.js",
+  "scripts": {
+    "build:server": "tsc",
+    "install:all": "concurrently \"cd app && npm install\" \"npm install\"",
+    "start:dev:win": "concurrently \"npm run build:server && cd app && cross-env NODE_ENV=dev npm run dev\" \"cross-env NODE_ENV=dev electronmon .\"",
+    "start:dev:linux": "concurrently \"npm run build:server && cd app && NODE_ENV=dev npm run dev\" \"NODE_ENV=dev electron .\"",
+    "build:front:dev:win": "npm run build:server && cd app && cross-env NODE_ENV=dev && npm run build",
+    "build:front:dev:linux": "npm run build:server && cd app && NODE_ENV=dev npm run build",
+    "build:front": "cd app && npm run build",
+    "start": "electron-forge start",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "release": "webpack --config=build/webpack.app.config.js --env=production && electron-builder --linux deb"
+  },
+  "author": "Antifragile Code",
+  "license": "ISC",
+  "devDependencies": {
+    "@electron-forge/cli": "^6.4.2",
+    "@electron-forge/maker-deb": "^6.4.2",
+    "@electron-forge/maker-rpm": "^6.4.2",
+    "@electron-forge/maker-squirrel": "^6.4.2",
+    "@electron-forge/maker-zip": "^6.4.2",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.4.2",
+    "concurrently": "^8.2.1",
+    "cross-env": "^7.0.3",
+    "electron": "^26.2.2",
+    "electron-builder": "^24.6.4",
+    "electronmon": "^2.0.2",
+    "prisma": "^5.3.1"
+  },
+  "dependencies": {
+    "@electron/rebuild": "^3.3.0",
+    "@hookform/resolvers": "^3.3.1",
+    "@prisma/client": "^5.3.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "sequelize": "^6.33.0",
+    "sqlite": "^5.0.1",
+    "sqlite3": "^5.1.6",
+    "typeorm": "^0.3.17",
+    "url": "^0.11.3",
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
+  },
+  "build": {
+    "appId": "com.electron.dapobud",
+    "files": [
+      "dist",
+      "app",
+      "!app/package.json",
+      "!app/package.lock.json"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "directories": {
+      "buildResources": "assets",
+      "output": "build/release"
+    },
+    "extraResources": [
+      "assets/**/*"
+    ],
+    "publish": null
+  }
+}
