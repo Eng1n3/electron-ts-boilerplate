@@ -1,6 +1,6 @@
 import { ConfirmationModal } from "@/components/ui/modal";
 import { useRefetchContacts } from "@/utils";
-import { useDisclosure } from "@mantine/hooks";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 type Props = {
   contactId: string;
@@ -8,17 +8,23 @@ type Props = {
   onClose: () => void;
 };
 export function DeleteConfirmModal(props: Props) {
-  const { isRefetch, refetch } = useRefetchContacts((state) => state);
-
   const deleteContact = async () => {
-    console.log("delete contact with id", props.contactId);
     if (props.contactId) {
       await global.contact.deleteContact({ id: props.contactId });
-      console.log("update contact success");
-      refetch();
-      props.onClose();
     }
   };
+
+  const queryClient = useQueryClient();
+  const { isLoading, mutateAsync } = useMutation(
+    ["delete-contact"],
+    deleteContact,
+    {
+      onSuccess: () => {
+        console.log("Success update data");
+        queryClient.refetchQueries(["get-all-contact"]);
+      },
+    }
+  );
 
   return (
     <>
@@ -27,8 +33,9 @@ export function DeleteConfirmModal(props: Props) {
         onClose={props.onClose}
         confirmationTitle="Yakin ingin menghapus data ini?"
         confirmationDesc="Data Anda akan terhapus tetapi masih bisa dipulihkan dengan cara menghubungi Admin"
-        onConfirm={() => deleteContact()}
+        onConfirm={() => mutateAsync()}
         themeColor="red"
+        isLoading={isLoading}
       />
     </>
   );

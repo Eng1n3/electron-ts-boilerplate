@@ -1,53 +1,45 @@
 import { ContactEditForm, DefaultTable } from "@/components";
 import { useRefetchContacts } from "@/utils";
-import { ActionIcon, Group, Modal, Title } from "@mantine/core";
+import { ActionIcon, Box, Button, Group, Modal, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { IconEdit, IconRefresh, IconTrash } from "@tabler/icons-react";
 import React from "react";
 import { DeleteConfirmModal } from "../DeleteConfirmModal";
+import { useQuery } from "@tanstack/react-query";
+import { CResponse, GResponse } from "@/types/connection/global";
 
-type Props = {};
+type ContactRowValues = {
+  id: string;
+  name: string;
+  phoneNumber: number;
+  photo: File | null;
+  gender: string;
+};
 
-export function ContactBook({}: Props) {
+export function ContactBook() {
   const [editModalOpened, { toggle: editModalToggle }] = useDisclosure();
   const [deleteModalOpened, { toggle: deleteModalToggle }] = useDisclosure();
-  const [contactId, setContactId] = React.useState();
-  const { isRefetch, killRefetch } = useRefetchContacts((state) => state);
-  const [contacts, setContacts] = React.useState<any[]>([]);
+  const [contactId, setContactId] = React.useState<string>();
 
   const fetchData = async () => {
     return await (global as any).contact.getContact();
   };
 
-  const deleteContact = async (id: string) => {
-    return await (global as any).contact.deleteContact({ id });
-  };
-
-  React.useEffect(() => {
-    fetchData()
-      .then((res) => {
-        console.log("CONTACTS", res);
-        setContacts(res.data.data);
-      })
-      // make sure to catch any error
-      .catch(console.error);
-  }, []);
-
-  React.useEffect(() => {
-    if (isRefetch) {
-      fetchData()
-        .then((res) => {
-          setContacts(res?.data);
-        })
-        // make sure to catch any error
-        .catch(console.error);
-    }
-
-    killRefetch();
-  }, [isRefetch, killRefetch]);
+  // Queries
+  const { isFetching, isLoading, data } = useQuery<
+    any,
+    any,
+    GResponse<CResponse<ContactRowValues>>
+  >({
+    queryKey: ["get-all-contact"],
+    queryFn: fetchData,
+    onSuccess: () => {
+      console.log("Sukses get all contact");
+    },
+  });
 
   return (
-    <>
+    <Box>
       <DefaultTable
         minWidth={340}
         sameWidthColumns
@@ -85,7 +77,8 @@ export function ContactBook({}: Props) {
             ),
           },
         ]}
-        records={contacts ?? []}
+        fetching={isLoading || isFetching}
+        records={data?.data?.data ?? []}
       />
       <Modal
         opened={editModalOpened}
@@ -107,6 +100,6 @@ export function ContactBook({}: Props) {
         onClose={deleteModalToggle}
         opened={deleteModalOpened}
       />
-    </>
+    </Box>
   );
 }
