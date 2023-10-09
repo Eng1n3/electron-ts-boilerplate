@@ -27,7 +27,6 @@ export class ContactService {
       where: { statusUpload: "store", id: id ? id : undefined },
       relations: { image: true },
     });
-    console.log(contacts, 29);
     const { status: uploadsStatus, data: updloadData } = await axios.post(
       "http://localhost:8001/synchronize/uploads",
       contacts
@@ -62,6 +61,7 @@ export class ContactService {
     const contacts = this.contactRepo.create({
       ...contactDto,
       image: contactImageRepoSave,
+      statusUpload: "store",
     });
     await this.contactRepo.save(contacts);
   }
