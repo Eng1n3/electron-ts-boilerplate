@@ -6,12 +6,7 @@ import { ContactImage } from "../contact-image/entities/contact-image.entity";
 import axios from "axios";
 import { Synchronize } from "../synchronize/entities/synchronize.entity";
 import config from "../config/env.config";
-import { where } from "sequelize";
 import createError from "http-errors";
-import { app, dialog } from "electron";
-import { copyFileSync } from "fs";
-import path from "path";
-import { readFileSync } from "fs";
 
 export class ContactService {
   public static _instance: ContactService;
@@ -32,20 +27,24 @@ export class ContactService {
     return ContactService._instance;
   }
 
-  async importContact() {
-    // Open a dialog to ask for the file path
-    const filePath = await dialog.showOpenDialog({
-      properties: ["openFile"],
+  async importContact(contacts: Contact[], lastDateDatabase: Date) {
+    const dataInitialSync = this.synchronizeRepo.create({
+      lastDateSynchronize: new Date(),
+      lastDateDatabase: lastDateDatabase,
     });
-    console.log(filePath, 39);
-    const fileName = path.basename(filePath.filePaths[0]);
+    const dataInitialContactImage = contacts?.map((contact: Contact) =>
+      this.contactImageRepo.create({ ...contact.image })
+    );
+    const dataInitialContact = contacts?.map((contact: Contact) =>
+      this.contactRepo.create({
+        ...contact,
+        statusUpload: "upload",
+      })
+    );
 
-    console.log(fileName, 41);
-
-    const file = readFileSync(filePath.filePaths[0]);
-    return file;
-    // Copy the chosen file to the application's data path
-    // copyFileSync(filePath, app.getPath("userData") + fileName);
+    await this.contactImageRepo.save(dataInitialContactImage);
+    await this.contactRepo.save(dataInitialContact);
+    await this.synchronizeRepo.save(dataInitialSync);
   }
 
   async synchronizeContact({ id }: { id?: string }) {

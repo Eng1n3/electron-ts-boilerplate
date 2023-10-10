@@ -9,3 +9,5 @@
 /**/*.sqlite
 /dist
 dist
+/index.html
+/renderer.js
