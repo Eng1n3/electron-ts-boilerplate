@@ -4,23 +4,20 @@ import {
   ContactBook,
   ContactCreateForm,
 } from "@/components";
+import { SyncButton } from "@/components/features/sync/SyncButton";
 import { Button, Flex, Grid, Group, Modal, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus, IconRecycle, IconSend } from "@tabler/icons-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
 
 export default function HomePage() {
   const [opened, { toggle }] = useDisclosure();
+
   return (
     <DefaultLayout>
       <Group position="right" spacing="xs">
-        <Button
-          leftIcon={<IconSend size={18} />}
-          size="xs"
-          radius="md"
-          color="indigo"
-        >
-          Synchronize
-        </Button>
+        <SyncButton />
         <Button
           leftIcon={<IconPlus size={18} />}
           size="xs"
