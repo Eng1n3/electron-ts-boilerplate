@@ -14,7 +14,7 @@
     "start": "electron-forge start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "electron-forge package",
-    "make": "electron-forge make",
+    "make": "npm run build:front && electron-forge make",
     "release": "webpack --config=build/webpack.app.config.js --env=production && electron-builder --linux deb"
   },
   "author": "Antifragile Code",
