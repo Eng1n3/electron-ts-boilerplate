@@ -67,39 +67,47 @@ export class ContactService {
       )}/synchronize/uploads`,
       contacts
     );
-    if (uploadsStatus !== 201) throw new Error(updloadData.message);
+    if (uploadsStatus !== 201)
+      throw new createError.BadRequest(updloadData.message);
+
     const { status: fecthStatus, data: fetchData } = await axios.get(
       `${config("DAPOBUD_URL")}:${config<number>(
         "DAPOBUD_PORT"
       )}/synchronize/fetch`,
       {
         params: {
-          lastDate: lastDate
-            ? new Date(lastDate as unknown as string).getTime()
+          lastDate: lastDate?.lastDateDatabase
+            ? new Date(lastDate.lastDateDatabase).getTime()
             : "",
         },
       }
     );
-    if (fecthStatus !== 200) throw new Error(fetchData.message);
-    const newImages = this.contactImageRepo.create(
-      fetchData?.data?.contacts?.map((contact: Contact) => ({
-        ...contact.image,
-      }))
-    );
-    await this.contactImageRepo.upsert(newImages, ["id"]);
-    const newContacts = this.contactRepo.create(
-      fetchData?.data?.contacts?.map((contact: Contact) => ({
-        ...contact,
-        statusUpload: "uploads",
-      }))
-    );
-    await this.contactRepo.upsert(newContacts, ["id"]);
-    if (fetchData?.data?.lastDateDatabase !== lastDate) {
-      const dataSyncContact = this.synchronizeRepo.create({
-        lastDateSynchronize: new Date(),
-        lastDateDatabase: fetchData?.data?.lastDateDatabase,
-      });
-      await this.synchronizeRepo.save(dataSyncContact);
+    if (fecthStatus !== 200)
+      throw new createError.BadRequest(fetchData.message);
+    if (
+      new Date(lastDate?.lastDateDatabase).getTime() !==
+      new Date(fetchData?.data?.lastDateDatabase).getTime()
+    ) {
+      const newImages = this.contactImageRepo.create(
+        fetchData?.data?.contacts?.map((contact: Contact) => ({
+          ...contact.image,
+        }))
+      );
+      await this.contactImageRepo.upsert(newImages, ["id"]);
+      const newContacts = this.contactRepo.create(
+        fetchData?.data?.contacts?.map((contact: Contact) => ({
+          ...contact,
+          statusUpload: "uploads",
+        }))
+      );
+      await this.contactRepo.upsert(newContacts, ["id"]);
+      if (fetchData?.data?.lastDateDatabase !== lastDate) {
+        const dataSyncContact = this.synchronizeRepo.create({
+          lastDateSynchronize: new Date(),
+          lastDateDatabase: fetchData?.data?.lastDateDatabase,
+        });
+        await this.synchronizeRepo.save(dataSyncContact);
+      }
     }
   }
 

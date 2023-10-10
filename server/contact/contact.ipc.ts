@@ -43,7 +43,6 @@ export class ContactIpc {
           message: "import canceled",
         };
       } catch (error) {
-        console.log(error, 32);
         return handleError(error);
       }
     });
@@ -56,6 +55,7 @@ export class ContactIpc {
           message: "Success synchronize contacts",
         };
       } catch (error) {
+        console.log(error, 32);
         return handleError(error);
       }
     });
