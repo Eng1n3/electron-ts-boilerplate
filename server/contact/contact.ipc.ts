@@ -1,5 +1,6 @@
 import { IpcMain, ipcMain as mainIpc } from "electron";
 import { ContactService } from "./contact.service";
+import handleError from "../util/handle-error.util";
 
 export class ContactIpc {
   private readonly ipcMain: IpcMain;
@@ -20,6 +21,20 @@ export class ContactIpc {
 
   async getIpc() {
     try {
+      this.ipcMain.handle("import-contact", async () => {
+        try {
+          const file = await this.contactService.importContact();
+          return file;
+          // return {
+          //   statusCode: 200,
+          //   message: "Success synchronize contacts",
+          // };
+        } catch (error) {
+          console.log(error, 32);
+          return handleError(error);
+        }
+      });
+
       this.ipcMain.handle("synchronize-contact", async () => {
         try {
           await this.contactService.synchronizeContact({});
@@ -28,10 +43,7 @@ export class ContactIpc {
             message: "Success synchronize contacts",
           };
         } catch (error) {
-          return {
-            statusCode: 500,
-            message: "internal server error",
-          };
+          return handleError(error);
         }
       });
 
@@ -44,10 +56,7 @@ export class ContactIpc {
             data: { data, count },
           };
         } catch (error) {
-          return {
-            statusCode: 500,
-            message: "internal server error",
-          };
+          return handleError(error);
         }
       });
 
@@ -65,10 +74,7 @@ export class ContactIpc {
           await this.contactService.createContact(values);
           return { statusCode: 200, message: "Success create contact" };
         } catch (error) {
-          return {
-            statusCode: 500,
-            message: "internal server error",
-          };
+          return handleError(error);
         }
       });
     } catch (error) {

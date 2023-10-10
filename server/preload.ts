@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld("versions", {
 });
 
 contextBridge.exposeInMainWorld("contact", {
+  importContact: () => ipcRenderer.invoke('import-contact'),
   synchronizeContact: () => ipcRenderer.invoke("synchronize-contact"),
   deleteContact: (value: any) => ipcRenderer.invoke("delete-contact", value),
   updateContact: (value: any) => ipcRenderer.invoke("update-contact", value),
