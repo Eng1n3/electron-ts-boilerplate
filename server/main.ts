@@ -3,9 +3,8 @@ import path from "path";
 import url from "url";
 import { ContactIpc } from "./contact/contact.ipc";
 
-const contactIpc = ContactIpc.getInstance();
-
 const isDev: boolean = (process.env.NODE_ENV as string) === "dev";
+const contactIpc = ContactIpc.getInstance();
 
 function createWindow(): BrowserWindow {
   const win = new BrowserWindow({
