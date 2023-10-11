@@ -13,7 +13,7 @@ const handleValidator = async <T>(values, source: T) => {
     const value = createInstance(values, source);
     await validateOrReject(value as object);
   } catch (error) {
-    throw createError(400, error);
+    throw createError(400, "error validation", error);
   }
 };
 
