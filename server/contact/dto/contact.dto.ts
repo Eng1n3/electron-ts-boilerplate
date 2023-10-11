@@ -24,11 +24,7 @@ export class ContactImageDto {
   deletedAt?: Date;
 }
 
-export class ContactDto {
-  @IsString()
-  @IsUUID()
-  id: string;
-
+export class CreateContactDto {
   @IsString()
   email: string;
 
@@ -43,13 +39,4 @@ export class ContactDto {
 
   @IsString()
   gender: string;
-
-  @IsString()
-  createdAt: Date;
-
-  @IsString()
-  updatedAt: Date;
-
-  @IsString()
-  deletedAt: Date;
 }

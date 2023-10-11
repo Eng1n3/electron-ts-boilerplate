@@ -2,6 +2,9 @@ import { IpcMain, ipcMain as mainIpc, dialog } from "electron";
 import { ContactService } from "./contact.service";
 import handleError from "../util/handle-error.util";
 import { readFileSync } from "fs";
+import { validateOrReject } from "class-validator";
+import { CreateContactDto } from "./dto/contact.dto";
+import handleValidator from "../util/handle-validator.util";
 
 export class ContactIpc {
   private readonly ipcMain: IpcMain;
@@ -84,6 +87,7 @@ export class ContactIpc {
 
     this.ipcMain.handle("create-contact", async (event, values) => {
       try {
+        await handleValidator(values, new CreateContactDto());
         await this.contactService.createContact(values);
         return { statusCode: 200, message: "Success create contact" };
       } catch (error) {

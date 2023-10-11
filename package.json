@@ -8,7 +8,7 @@
     "build:server:win": "tsc",
     "install:all": "concurrently \"cd app && npm install\" \"npm install\"",
     "start:dev:win": "concurrently \"cd app && cross-env NODE_ENV=dev npm run dev\" \"cross-env NODE_ENV=dev npm run build:server:win && cross-env NODE_ENV=dev electronmon .\"",
-    "start:dev:linux": "concurrently \"cd app && NODE_ENV=dev npm run dev\" \"NODE_ENV=dev electronmon .\"",
+    "start:dev:linux": "concurrently \"cd app && NODE_ENV=dev npm run dev\" \"NODE_ENV=dev electron .\"",
     "build:front:dev:win": "npm run build:server && cd app && cross-env NODE_ENV=dev && npm run build",
     "build:front:dev:linux": "npm run build:server && cd app && NODE_ENV=dev npm run build",
     "build:front": "cd app && npm run build",

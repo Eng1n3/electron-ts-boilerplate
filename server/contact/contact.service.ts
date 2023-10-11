@@ -1,7 +1,7 @@
 import { Repository, IsNull } from "typeorm";
 import { AppDataSource } from "../database/data-source";
 import { Contact } from "./entities/contact.entity";
-import { ContactDto } from "./dto/contact.dto";
+import { CreateContactDto } from "./dto/contact.dto";
 import { ContactImage } from "../contact-image/entities/contact-image.entity";
 import axios from "axios";
 import { Synchronize } from "../synchronize/entities/synchronize.entity";
@@ -111,7 +111,7 @@ export class ContactService {
     }
   }
 
-  async createContact(contactDto: ContactDto) {
+  async createContact(contactDto: CreateContactDto) {
     const newContactImage = this.contactImageRepo.create({
       filename: "testFilename",
       mimeType: "image/jpeg",
