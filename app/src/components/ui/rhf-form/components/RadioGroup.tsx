@@ -38,7 +38,6 @@ function RadioGroup(props: RadioGroupProps) {
       {...rest}
       {...restField}
     >
-      {/* eslint-disable @typescript-eslint/no-shadow */}
       <Orientation mt="xs" {...orientationProps}>
         {options.map((option, index) => {
           const { label, value, ...rest } = option;
